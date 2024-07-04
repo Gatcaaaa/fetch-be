@@ -9,7 +9,6 @@ export default function UsersIndex() {
 
   const fetchDataUsers = async () => {
     const token = Cookies.get("token");
-    console.log("Token retrieved from cookies:", token);
 
     if (token) {
       Api.defaults.headers.common["Authorization"] = token;
@@ -28,6 +27,21 @@ export default function UsersIndex() {
   useEffect(() => {
     fetchDataUsers();
   }, []);
+
+  const deleteUsers = async (id) => {
+    const token = Cookies.get("token");
+    if (token) {
+      Api.defaults.headers.common["Authorization"] = token;
+      try {
+        await Api.delete(`/api/admin/users/${id}`);
+        fetchDataUsers();
+      } catch (e) {
+        console.error("error bolo", e);
+      }
+    } else {
+      console.error("");
+    }
+  };
 
   return (
     <div className="container mt-5 mb-5">
@@ -70,7 +84,10 @@ export default function UsersIndex() {
                           >
                             Edit
                           </Link>
-                          <button className="btn btn-sm btn-danger rounded-sm shadow border-0">
+                          <button
+                            onClick={() => deleteUsers(user.id)}
+                            className="btn btn-sm btn-danger rounded-sm shadow border-0"
+                          >
                             Delete
                           </button>
                         </td>

@@ -21,14 +21,12 @@ export default function Login() {
       password: password,
     })
       .then((response) => {
-        console.log("token :", response.data);
-        Cookies.set("token", response.data.token);
+        Cookies.set("token", response.data.data.token);
         Cookies.set("user", JSON.stringify(response.data.data.user));
         setIsAuthenticated(true);
         navigate("/admin/dashboard", { replace: true });
       })
       .catch((error) => {
-        console.log("error :", error.response.data);
         setValidation(error.response.data);
         setLoginFailed(error.response.data);
       });
